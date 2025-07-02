@@ -1,0 +1,95 @@
+type BotServicio {
+    id: ID!
+    titulo: String!
+    descripcion: String!
+    imagenUrl: String
+    funciones: [Funcion!]
+    integraciones: [Integracion!]
+    casosUso: [CasoUso!]
+    tecnologias: [Tecnologia!]
+    flujosAutomatizados: [FlujoAutomatizado!]
+    requisitos: [Requisito!]
+}
+
+type Funcion {
+    id: ID!
+    descripcion: String!
+}
+
+type Integracion {
+    id: ID!
+    nombre: String!
+}
+
+type CasoUso {
+    id: ID!
+    descripcion: String!
+}
+
+type Tecnologia {
+    id: ID!
+    nombre: String!
+}
+
+type FlujoAutomatizado {
+    id: ID!
+    descripcion: String!
+}
+
+type Requisito {
+    id: ID!
+    descripcion: String!
+}
+
+input BotServicioInput {
+    titulo: String!
+    descripcion: String!
+    imagenUrl: String
+    funciones: [FuncionInput!]
+    integraciones: [IntegracionInput!]
+    casosUso: [CasoUsoInput!]
+    tecnologias: [TecnologiaInput!]
+    flujosAutomatizados: [FlujoAutomatizadoInput!]
+    requisitos: [RequisitoInput!]
+}
+
+input FuncionInput {
+    descripcion: String!
+}
+
+input IntegracionInput {
+    nombre: String!
+}
+
+input CasoUsoInput {
+    descripcion: String!
+}
+
+input TecnologiaInput {
+    nombre: String!
+}
+
+input FlujoAutomatizadoInput {
+    descripcion: String!
+}
+
+input RequisitoInput {
+    descripcion: String!
+}
+
+type Query {
+    obtenerBots: [BotServicio!]
+    obtenerBotPorId(id: ID!): BotServicio
+}
+
+type Mutation {
+    crearBot(input: BotServicioInput!): BotServicio!
+    actualizarBot(id: ID!, input: BotServicioInput!): BotServicio!
+    eliminarBot(id: ID!): Boolean!
+    agregarFuncion(botId: ID!, input: FuncionInput!): Funcion!
+    agregarIntegracion(botId: ID!, input: IntegracionInput!): Integracion!
+    agregarCasoUso(botId: ID!, input: CasoUsoInput!): CasoUso!
+    agregarTecnologia(botId: ID!, input: TecnologiaInput!): Tecnologia!
+    agregarFlujoAutomatizado(botId: ID!, input: FlujoAutomatizadoInput!): FlujoAutomatizado!
+    agregarRequisito(botId: ID!, input: RequisitoInput!): Requisito!
+} 
