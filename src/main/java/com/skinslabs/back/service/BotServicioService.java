@@ -2,12 +2,12 @@ package com.skinslabs.back.service;
 
 import com.skinslabs.back.model.*;
 import com.skinslabs.back.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 
 /**
  * Servicio para la gestión de bots y sus relaciones.
@@ -15,8 +15,12 @@ import java.util.Optional;
  */
 @Service
 public class BotServicioService {
-    @Autowired
-    private BotServicioRepository botServicioRepository;
+    private final BotServicioRepository botServicioRepository;
+    private static final String BOT_NO_ENCONTRADO = "Bot no encontrado";
+
+    public BotServicioService(BotServicioRepository botServicioRepository) {
+        this.botServicioRepository = botServicioRepository;
+    }
 
     public List<BotServicio> obtenerTodos() {
         return botServicioRepository.findAll();
@@ -57,48 +61,48 @@ public class BotServicioService {
      */
     public BotServicio actualizar(Long id, BotServicio botActualizado) {
         BotServicio bot = botServicioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Bot no encontrado"));
+                .orElseThrow(() -> new RuntimeException(BOT_NO_ENCONTRADO));
         bot.setTitulo(botActualizado.getTitulo());
         bot.setDescripcion(botActualizado.getDescripcion());
         bot.setImagenUrl(botActualizado.getImagenUrl());
 
         // Limpiar y agregar nuevas relaciones
-        bot.getFunciones().clear();
+        bot.setFunciones(new ArrayList<>());
         if (botActualizado.getFunciones() != null) {
             botActualizado.getFunciones().forEach(f -> {
                 f.setBotServicio(bot);
                 bot.getFunciones().add(f);
             });
         }
-        bot.getIntegraciones().clear();
+        bot.setIntegraciones(new ArrayList<>());
         if (botActualizado.getIntegraciones() != null) {
             botActualizado.getIntegraciones().forEach(i -> {
                 i.setBotServicio(bot);
                 bot.getIntegraciones().add(i);
             });
         }
-        bot.getCasosUso().clear();
+        bot.setCasosUso(new ArrayList<>());
         if (botActualizado.getCasosUso() != null) {
             botActualizado.getCasosUso().forEach(c -> {
                 c.setBotServicio(bot);
                 bot.getCasosUso().add(c);
             });
         }
-        bot.getTecnologias().clear();
+        bot.setTecnologias(new ArrayList<>());
         if (botActualizado.getTecnologias() != null) {
             botActualizado.getTecnologias().forEach(t -> {
                 t.setBotServicio(bot);
                 bot.getTecnologias().add(t);
             });
         }
-        bot.getFlujosAutomatizados().clear();
+        bot.setFlujosAutomatizados(new ArrayList<>());
         if (botActualizado.getFlujosAutomatizados() != null) {
             botActualizado.getFlujosAutomatizados().forEach(f -> {
                 f.setBotServicio(bot);
                 bot.getFlujosAutomatizados().add(f);
             });
         }
-        bot.getRequisitos().clear();
+        bot.setRequisitos(new ArrayList<>());
         if (botActualizado.getRequisitos() != null) {
             botActualizado.getRequisitos().forEach(r -> {
                 r.setBotServicio(bot);

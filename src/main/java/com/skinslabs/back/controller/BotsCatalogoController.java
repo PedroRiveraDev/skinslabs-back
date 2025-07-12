@@ -12,7 +12,7 @@ import com.skinslabs.back.service.BotsCatalogo;
 public class BotsCatalogoController {
     @GetMapping("/catalogo")
     public List<BotsCatalogo> getCatalogo() {
-        List<BotsCatalogo> catalogo = List.of(
+        return List.of(
                 new BotsCatalogo(
                         "Bot de Reportes Automatizados",
                         "Genera y envía reportes con métricas clave semanal o mensualmente a través de Gmail o SendGrid."),
@@ -28,7 +28,5 @@ public class BotsCatalogoController {
                         "Bot de Atención 24/7",
                         "Chatbot basado en GPT-4 que responde preguntas frecuentes, deriva solicitudes y automatiza respuestas por correo o WhatsApp."
                         ));
-        
-        return catalogo;
     }
 }

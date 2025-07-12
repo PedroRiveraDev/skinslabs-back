@@ -12,20 +12,37 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class RelacionService {
-    @Autowired private BotServicioRepository botServicioRepository;
-    @Autowired private FuncionRepository funcionRepository;
-    @Autowired private IntegracionRepository integracionRepository;
-    @Autowired private CasoUsoRepository casoUsoRepository;
-    @Autowired private TecnologiaRepository tecnologiaRepository;
-    @Autowired private FlujoAutomatizadoRepository flujoAutomatizadoRepository;
-    @Autowired private RequisitoRepository requisitoRepository;
+    private final BotServicioRepository botServicioRepository;
+    private final FuncionRepository funcionRepository;
+    private final IntegracionRepository integracionRepository;
+    private final CasoUsoRepository casoUsoRepository;
+    private final TecnologiaRepository tecnologiaRepository;
+    private final FlujoAutomatizadoRepository flujoAutomatizadoRepository;
+    private final RequisitoRepository requisitoRepository;
+    private static final String BOT_NO_ENCONTRADO = "Bot no encontrado";
+
+    public RelacionService(BotServicioRepository botServicioRepository,
+                          FuncionRepository funcionRepository,
+                          IntegracionRepository integracionRepository,
+                          CasoUsoRepository casoUsoRepository,
+                          TecnologiaRepository tecnologiaRepository,
+                          FlujoAutomatizadoRepository flujoAutomatizadoRepository,
+                          RequisitoRepository requisitoRepository) {
+        this.botServicioRepository = botServicioRepository;
+        this.funcionRepository = funcionRepository;
+        this.integracionRepository = integracionRepository;
+        this.casoUsoRepository = casoUsoRepository;
+        this.tecnologiaRepository = tecnologiaRepository;
+        this.flujoAutomatizadoRepository = flujoAutomatizadoRepository;
+        this.requisitoRepository = requisitoRepository;
+    }
 
     /**
      * Agrega una función a un bot existente.
      */
     @Transactional
     public Funcion agregarFuncion(Long botId, Funcion funcion) {
-        BotServicio bot = botServicioRepository.findById(botId).orElseThrow(() -> new RuntimeException("Bot no encontrado"));
+        BotServicio bot = botServicioRepository.findById(botId).orElseThrow(() -> new RuntimeException(BOT_NO_ENCONTRADO));
         funcion.setBotServicio(bot);
         return funcionRepository.save(funcion);
     }
@@ -34,7 +51,7 @@ public class RelacionService {
      */
     @Transactional
     public Integracion agregarIntegracion(Long botId, Integracion integracion) {
-        BotServicio bot = botServicioRepository.findById(botId).orElseThrow(() -> new RuntimeException("Bot no encontrado"));
+        BotServicio bot = botServicioRepository.findById(botId).orElseThrow(() -> new RuntimeException(BOT_NO_ENCONTRADO));
         integracion.setBotServicio(bot);
         return integracionRepository.save(integracion);
     }
@@ -43,7 +60,7 @@ public class RelacionService {
      */
     @Transactional
     public CasoUso agregarCasoUso(Long botId, CasoUso casoUso) {
-        BotServicio bot = botServicioRepository.findById(botId).orElseThrow(() -> new RuntimeException("Bot no encontrado"));
+        BotServicio bot = botServicioRepository.findById(botId).orElseThrow(() -> new RuntimeException(BOT_NO_ENCONTRADO));
         casoUso.setBotServicio(bot);
         return casoUsoRepository.save(casoUso);
     }
@@ -52,7 +69,7 @@ public class RelacionService {
      */
     @Transactional
     public Tecnologia agregarTecnologia(Long botId, Tecnologia tecnologia) {
-        BotServicio bot = botServicioRepository.findById(botId).orElseThrow(() -> new RuntimeException("Bot no encontrado"));
+        BotServicio bot = botServicioRepository.findById(botId).orElseThrow(() -> new RuntimeException(BOT_NO_ENCONTRADO));
         tecnologia.setBotServicio(bot);
         return tecnologiaRepository.save(tecnologia);
     }
@@ -61,7 +78,7 @@ public class RelacionService {
      */
     @Transactional
     public FlujoAutomatizado agregarFlujoAutomatizado(Long botId, FlujoAutomatizado flujo) {
-        BotServicio bot = botServicioRepository.findById(botId).orElseThrow(() -> new RuntimeException("Bot no encontrado"));
+        BotServicio bot = botServicioRepository.findById(botId).orElseThrow(() -> new RuntimeException(BOT_NO_ENCONTRADO));
         flujo.setBotServicio(bot);
         return flujoAutomatizadoRepository.save(flujo);
     }
@@ -70,7 +87,7 @@ public class RelacionService {
      */
     @Transactional
     public Requisito agregarRequisito(Long botId, Requisito requisito) {
-        BotServicio bot = botServicioRepository.findById(botId).orElseThrow(() -> new RuntimeException("Bot no encontrado"));
+        BotServicio bot = botServicioRepository.findById(botId).orElseThrow(() -> new RuntimeException(BOT_NO_ENCONTRADO));
         requisito.setBotServicio(bot);
         return requisitoRepository.save(requisito);
     }

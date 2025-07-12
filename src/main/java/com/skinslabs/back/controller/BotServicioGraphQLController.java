@@ -17,10 +17,13 @@ import java.util.List;
  */
 @Controller
 public class BotServicioGraphQLController {
-    @Autowired
-    private BotServicioService botServicioService;
-    @Autowired
-    private RelacionService relacionService;
+    private final BotServicioService botServicioService;
+    private final RelacionService relacionService;
+
+    public BotServicioGraphQLController(BotServicioService botServicioService, RelacionService relacionService) {
+        this.botServicioService = botServicioService;
+        this.relacionService = relacionService;
+    }
 
     /**
      * Query para obtener todos los bots con sus relaciones.

@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import graphql.schema.DataFetchingEnvironment;
 
-import java.util.List;
-
 @Component
 public class GraphQLExceptionHandler extends DataFetcherExceptionResolverAdapter {
     @Override

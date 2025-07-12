@@ -16,8 +16,12 @@ import java.io.IOException;
 @RequestMapping("/api/bots")
 public class BotImagenController {
 
-    @Autowired
-    private BotServicioRepository botServicioRepository;
+    private final BotServicioRepository botServicioRepository;
+    private static final String BOT_NO_ENCONTRADO = "Bot no encontrado";
+
+    public BotImagenController(BotServicioRepository botServicioRepository) {
+        this.botServicioRepository = botServicioRepository;
+    }
 
     /**
      * Endpoint para subir una imagen y asociarla a un bot.
@@ -26,7 +30,7 @@ public class BotImagenController {
     @PostMapping("/{id}/imagen")
     public ResponseEntity<String> subirImagen(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
         BotServicio bot = botServicioRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Bot no encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, BOT_NO_ENCONTRADO));
 
         // Guardar archivo en /uploads en la raíz del proyecto
         String uploadsDir = System.getProperty("user.dir") + File.separator + "uploads" + File.separator;

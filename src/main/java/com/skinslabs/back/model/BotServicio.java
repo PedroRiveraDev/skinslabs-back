@@ -2,6 +2,7 @@ package com.skinslabs.back.model;
 
 import jakarta.persistence.*;
 import java.util.List;
+import java.util.ArrayList;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -29,22 +30,22 @@ public class BotServicio {
     private String imagenUrl;
 
     @OneToMany(mappedBy = "botServicio", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Funcion> funciones;
+    private List<Funcion> funciones = new ArrayList<>();
 
     @OneToMany(mappedBy = "botServicio", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Integracion> integraciones;
+    private List<Integracion> integraciones = new ArrayList<>();
 
     @OneToMany(mappedBy = "botServicio", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<CasoUso> casosUso;
+    private List<CasoUso> casosUso = new ArrayList<>();
 
     @OneToMany(mappedBy = "botServicio", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Tecnologia> tecnologias;
+    private List<Tecnologia> tecnologias = new ArrayList<>();
 
     @OneToMany(mappedBy = "botServicio", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<FlujoAutomatizado> flujosAutomatizados;
+    private List<FlujoAutomatizado> flujosAutomatizados = new ArrayList<>();
 
     @OneToMany(mappedBy = "botServicio", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Requisito> requisitos;
+    private List<Requisito> requisitos = new ArrayList<>();
 
     // Getters y setters
     public Long getId() { return id; }
