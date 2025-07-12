@@ -8,6 +8,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CorsConfig {
 
+    // Esta configuración se ha movido a WebConfig.java para mejor organización
+    // y evitar conflictos con la configuración de recursos estáticos
+    
+    /*
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
@@ -20,4 +24,5 @@ public class CorsConfig {
             }
         };
     }
+    */
 }
