@@ -56,7 +56,9 @@ public class ImagenService {
         } catch (IOException e) {
             // Si hay error al guardar, eliminar el archivo si se creó
             if (dest.exists()) {
-                dest.delete();
+                if (!dest.delete()) {
+                    System.err.println("[WARN] No se pudo eliminar el archivo temporal tras error de subida: " + dest.getAbsolutePath());
+                }
             }
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, 
                 "Error al guardar la imagen: " + e.getMessage());
