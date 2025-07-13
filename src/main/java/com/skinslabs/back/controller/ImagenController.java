@@ -105,7 +105,7 @@ public class ImagenController {
         try {
             // Validar el nombre del archivo
             if (filename.contains("..") || filename.contains("/") || filename.contains("\\")) {
-                return ResponseEntity.ok(false);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
             }
 
             String uploadsPath = System.getProperty("user.dir") + File.separator + UPLOADS_DIR;
@@ -117,10 +117,13 @@ public class ImagenController {
             Path normalizedFilePath = filePath.toAbsolutePath().normalize();
             
             boolean existe = file.exists() && file.isFile() && normalizedFilePath.startsWith(uploadsDir);
-            return ResponseEntity.ok(existe);
-
+            if (existe) {
+                return ResponseEntity.ok(true);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+            }
         } catch (Exception e) {
-            return ResponseEntity.ok(false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
         }
     }
 } 

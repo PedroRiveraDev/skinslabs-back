@@ -82,8 +82,9 @@ public class ImagenService {
         // Eliminar el archivo físico si existe
         if (imageFile.exists()) {
             if (!imageFile.delete()) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, 
-                    "No se pudo eliminar el archivo de imagen");
+                // Manejar el valor booleano retornado por delete
+                System.err.println("[WARN] No se pudo eliminar el archivo de imagen: " + imageFile.getAbsolutePath());
+                // No lanzar excepción, solo advertir
             }
         }
 

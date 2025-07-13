@@ -3,6 +3,7 @@ package com.skinslabs.back.model;
 import jakarta.persistence.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Objects;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -137,5 +138,28 @@ public class BotServicio {
                 this.requisitos.add(r);
             });
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BotServicio that = (BotServicio) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "BotServicio{" +
+                "id=" + id +
+                ", titulo='" + titulo + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", imagenUrl='" + imagenUrl + '\'' +
+                '}';
     }
 } 
