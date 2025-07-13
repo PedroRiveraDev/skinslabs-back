@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -246,5 +247,71 @@ class BotServicioGraphQLControllerTest {
         assertNotNull(resultado);
         assertEquals(requisito, resultado);
         verify(relacionService, times(1)).agregarRequisito(1L, requisito);
+    }
+
+    @Test
+    void actualizarBot_ConOrphanRemoval_DebeReemplazarCasosUsoCorrectamente() {
+        // Arrange - Crear bot actualizado con nuevos casos de uso
+        BotServicio botActualizado = new BotServicio();
+        botActualizado.setTitulo("Bot Actualizado");
+        botActualizado.setDescripcion("Descripción actualizada");
+        
+        CasoUso nuevoCasoUso1 = new CasoUso();
+        nuevoCasoUso1.setDescripcion("Nuevo caso de uso 1");
+        
+        CasoUso nuevoCasoUso2 = new CasoUso();
+        nuevoCasoUso2.setDescripcion("Nuevo caso de uso 2");
+        
+        CasoUso nuevoCasoUso3 = new CasoUso();
+        nuevoCasoUso3.setDescripcion("Nuevo caso de uso 3");
+        
+        botActualizado.setCasosUso(Arrays.asList(nuevoCasoUso1, nuevoCasoUso2, nuevoCasoUso3));
+
+        // Configurar el mock para devolver el bot actualizado
+        when(botServicioService.actualizar(eq(1L), any(BotServicio.class))).thenReturn(botActualizado);
+
+        // Act
+        BotServicio resultado = controller.actualizarBot(1L, botActualizado);
+
+        // Assert
+        assertNotNull(resultado);
+        assertEquals("Bot Actualizado", resultado.getTitulo());
+        assertEquals("Descripción actualizada", resultado.getDescripcion());
+        
+        // Verificar que los casos de uso fueron configurados correctamente
+        List<CasoUso> casosUsoResultado = resultado.getCasosUso();
+        assertEquals(3, casosUsoResultado.size());
+        
+        // Verificar que los nuevos casos de uso tienen la referencia correcta al bot
+        casosUsoResultado.forEach(casoUso -> {
+            assertEquals(resultado, casoUso.getBotServicio());
+            assertTrue(casoUso.getDescripcion().startsWith("Nuevo caso de uso"));
+        });
+        
+        // Verificar que el servicio fue llamado correctamente
+        verify(botServicioService, times(1)).actualizar(1L, botActualizado);
+    }
+
+    @Test
+    void actualizarBot_ConListaVacia_DebeLimpiarCasosUso() {
+        // Arrange - Crear bot actualizado con lista vacía
+        BotServicio botActualizado = new BotServicio();
+        botActualizado.setTitulo("Bot Actualizado");
+        botActualizado.setDescripcion("Descripción actualizada");
+        botActualizado.setCasosUso(new ArrayList<>()); // Lista vacía
+
+        // Configurar el mock para devolver el bot actualizado
+        when(botServicioService.actualizar(eq(1L), any(BotServicio.class))).thenReturn(botActualizado);
+
+        // Act
+        BotServicio resultado = controller.actualizarBot(1L, botActualizado);
+
+        // Assert
+        assertNotNull(resultado);
+        assertEquals("Bot Actualizado", resultado.getTitulo());
+        assertTrue(resultado.getCasosUso().isEmpty());
+        
+        // Verificar que el servicio fue llamado correctamente
+        verify(botServicioService, times(1)).actualizar(1L, botActualizado);
     }
 } 

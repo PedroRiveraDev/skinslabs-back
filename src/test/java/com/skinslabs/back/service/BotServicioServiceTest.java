@@ -254,4 +254,100 @@ class BotServicioServiceTest {
         // Assert
         verify(botServicioRepository, times(1)).deleteById(id);
     }
+
+    @Test
+    void actualizarBot_ConOrphanRemoval_DebeReemplazarCasosUsoCorrectamente() {
+        // Arrange
+        BotServicio botExistente = new BotServicio();
+        botExistente.setId(1L);
+        botExistente.setTitulo("Bot Original");
+        botExistente.setDescripcion("Descripción original");
+        
+        CasoUso casoUso1 = new CasoUso();
+        casoUso1.setId(1L);
+        casoUso1.setDescripcion("Caso de uso original 1");
+        casoUso1.setBotServicio(botExistente);
+        
+        CasoUso casoUso2 = new CasoUso();
+        casoUso2.setId(2L);
+        casoUso2.setDescripcion("Caso de uso original 2");
+        casoUso2.setBotServicio(botExistente);
+        
+        botExistente.setCasosUso(Arrays.asList(casoUso1, casoUso2));
+
+        BotServicio botActualizado = new BotServicio();
+        botActualizado.setTitulo("Bot Actualizado");
+        botActualizado.setDescripcion("Descripción actualizada");
+        
+        CasoUso nuevoCasoUso1 = new CasoUso();
+        nuevoCasoUso1.setDescripcion("Nuevo caso de uso 1");
+        
+        CasoUso nuevoCasoUso2 = new CasoUso();
+        nuevoCasoUso2.setDescripcion("Nuevo caso de uso 2");
+        
+        CasoUso nuevoCasoUso3 = new CasoUso();
+        nuevoCasoUso3.setDescripcion("Nuevo caso de uso 3");
+        
+        botActualizado.setCasosUso(Arrays.asList(nuevoCasoUso1, nuevoCasoUso2, nuevoCasoUso3));
+
+        when(botServicioRepository.findById(1L)).thenReturn(Optional.of(botExistente));
+        when(botServicioRepository.save(any(BotServicio.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // Act
+        BotServicio resultado = botServicioService.actualizar(1L, botActualizado);
+
+        // Assert
+        assertNotNull(resultado);
+        assertEquals("Bot Actualizado", resultado.getTitulo());
+        assertEquals("Descripción actualizada", resultado.getDescripcion());
+        
+        // Verificar que los casos de uso originales fueron reemplazados
+        List<CasoUso> casosUsoResultado = resultado.getCasosUso();
+        assertEquals(3, casosUsoResultado.size());
+        
+        // Verificar que los nuevos casos de uso tienen la referencia correcta al bot
+        casosUsoResultado.forEach(casoUso -> {
+            assertEquals(resultado, casoUso.getBotServicio());
+            assertTrue(casoUso.getDescripcion().startsWith("Nuevo caso de uso"));
+        });
+        
+        // Verificar que el repositorio fue llamado correctamente
+        verify(botServicioRepository).findById(1L);
+        verify(botServicioRepository).save(any(BotServicio.class));
+    }
+
+    @Test
+    void actualizarBot_ConListaVacia_DebeLimpiarCasosUso() {
+        // Arrange
+        BotServicio botExistente = new BotServicio();
+        botExistente.setId(1L);
+        botExistente.setTitulo("Bot Original");
+        botExistente.setDescripcion("Descripción original");
+        
+        CasoUso casoUso1 = new CasoUso();
+        casoUso1.setId(1L);
+        casoUso1.setDescripcion("Caso de uso original 1");
+        casoUso1.setBotServicio(botExistente);
+        
+        botExistente.setCasosUso(Arrays.asList(casoUso1));
+
+        BotServicio botActualizado = new BotServicio();
+        botActualizado.setTitulo("Bot Actualizado");
+        botActualizado.setDescripcion("Descripción actualizada");
+        
+        botActualizado.setCasosUso(null); // Simular lista vacía
+
+        when(botServicioRepository.findById(1L)).thenReturn(Optional.of(botExistente));
+        when(botServicioRepository.save(any(BotServicio.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        
+        // Act
+        BotServicio resultado = botServicioService.actualizar(1L, botActualizado);
+
+        // Assert
+        assertNotNull(resultado);
+        assertTrue(resultado.getCasosUso().isEmpty());
+        
+        verify(botServicioRepository).findById(1L);
+        verify(botServicioRepository).save(any(BotServicio.class));
+    }
 } 

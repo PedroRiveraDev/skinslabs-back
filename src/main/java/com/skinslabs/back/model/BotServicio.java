@@ -56,16 +56,86 @@ public class BotServicio {
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
     public String getImagenUrl() { return imagenUrl; }
     public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }
-    public List<Funcion> getFunciones() { return funciones; }
-    public void setFunciones(List<Funcion> funciones) { this.funciones = funciones; }
-    public List<Integracion> getIntegraciones() { return integraciones; }
-    public void setIntegraciones(List<Integracion> integraciones) { this.integraciones = integraciones; }
-    public List<CasoUso> getCasosUso() { return casosUso; }
-    public void setCasosUso(List<CasoUso> casosUso) { this.casosUso = casosUso; }
-    public List<Tecnologia> getTecnologias() { return tecnologias; }
-    public void setTecnologias(List<Tecnologia> tecnologias) { this.tecnologias = tecnologias; }
-    public List<FlujoAutomatizado> getFlujosAutomatizados() { return flujosAutomatizados; }
-    public void setFlujosAutomatizados(List<FlujoAutomatizado> flujosAutomatizados) { this.flujosAutomatizados = flujosAutomatizados; }
-    public List<Requisito> getRequisitos() { return requisitos; }
-    public void setRequisitos(List<Requisito> requisitos) { this.requisitos = requisitos; }
+    
+    // Getters para las colecciones
+    public List<Funcion> getFunciones() { 
+        if (funciones == null) funciones = new ArrayList<>();
+        return funciones; 
+    }
+    public List<Integracion> getIntegraciones() { 
+        if (integraciones == null) integraciones = new ArrayList<>();
+        return integraciones; 
+    }
+    public List<CasoUso> getCasosUso() { 
+        if (casosUso == null) casosUso = new ArrayList<>();
+        return casosUso; 
+    }
+    public List<Tecnologia> getTecnologias() { 
+        if (tecnologias == null) tecnologias = new ArrayList<>();
+        return tecnologias; 
+    }
+    public List<FlujoAutomatizado> getFlujosAutomatizados() { 
+        if (flujosAutomatizados == null) flujosAutomatizados = new ArrayList<>();
+        return flujosAutomatizados; 
+    }
+    public List<Requisito> getRequisitos() { 
+        if (requisitos == null) requisitos = new ArrayList<>();
+        return requisitos; 
+    }
+    
+    // Setters para las colecciones (mantener la referencia a la misma lista)
+    public void setFunciones(List<Funcion> funciones) { 
+        this.funciones.clear();
+        if (funciones != null) {
+            funciones.forEach(f -> {
+                f.setBotServicio(this);
+                this.funciones.add(f);
+            });
+        }
+    }
+    public void setIntegraciones(List<Integracion> integraciones) { 
+        this.integraciones.clear();
+        if (integraciones != null) {
+            integraciones.forEach(i -> {
+                i.setBotServicio(this);
+                this.integraciones.add(i);
+            });
+        }
+    }
+    public void setCasosUso(List<CasoUso> casosUso) { 
+        this.casosUso.clear();
+        if (casosUso != null) {
+            casosUso.forEach(c -> {
+                c.setBotServicio(this);
+                this.casosUso.add(c);
+            });
+        }
+    }
+    public void setTecnologias(List<Tecnologia> tecnologias) { 
+        this.tecnologias.clear();
+        if (tecnologias != null) {
+            tecnologias.forEach(t -> {
+                t.setBotServicio(this);
+                this.tecnologias.add(t);
+            });
+        }
+    }
+    public void setFlujosAutomatizados(List<FlujoAutomatizado> flujosAutomatizados) { 
+        this.flujosAutomatizados.clear();
+        if (flujosAutomatizados != null) {
+            flujosAutomatizados.forEach(f -> {
+                f.setBotServicio(this);
+                this.flujosAutomatizados.add(f);
+            });
+        }
+    }
+    public void setRequisitos(List<Requisito> requisitos) { 
+        this.requisitos.clear();
+        if (requisitos != null) {
+            requisitos.forEach(r -> {
+                r.setBotServicio(this);
+                this.requisitos.add(r);
+            });
+        }
+    }
 } 

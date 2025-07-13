@@ -59,58 +59,28 @@ public class BotServicioService {
     /**
      * Actualiza un bot existente y reemplaza todas sus relaciones de forma segura.
      */
+    @Transactional
     public BotServicio actualizar(Long id, BotServicio botActualizado) {
         BotServicio bot = botServicioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(BOT_NO_ENCONTRADO));
+        
+        // Actualizar campos básicos
         bot.setTitulo(botActualizado.getTitulo());
         bot.setDescripcion(botActualizado.getDescripcion());
         bot.setImagenUrl(botActualizado.getImagenUrl());
 
-        // Limpiar y agregar nuevas relaciones
-        bot.setFunciones(new ArrayList<>());
-        if (botActualizado.getFunciones() != null) {
-            botActualizado.getFunciones().forEach(f -> {
-                f.setBotServicio(bot);
-                bot.getFunciones().add(f);
-            });
-        }
-        bot.setIntegraciones(new ArrayList<>());
-        if (botActualizado.getIntegraciones() != null) {
-            botActualizado.getIntegraciones().forEach(i -> {
-                i.setBotServicio(bot);
-                bot.getIntegraciones().add(i);
-            });
-        }
-        bot.setCasosUso(new ArrayList<>());
-        if (botActualizado.getCasosUso() != null) {
-            botActualizado.getCasosUso().forEach(c -> {
-                c.setBotServicio(bot);
-                bot.getCasosUso().add(c);
-            });
-        }
-        bot.setTecnologias(new ArrayList<>());
-        if (botActualizado.getTecnologias() != null) {
-            botActualizado.getTecnologias().forEach(t -> {
-                t.setBotServicio(bot);
-                bot.getTecnologias().add(t);
-            });
-        }
-        bot.setFlujosAutomatizados(new ArrayList<>());
-        if (botActualizado.getFlujosAutomatizados() != null) {
-            botActualizado.getFlujosAutomatizados().forEach(f -> {
-                f.setBotServicio(bot);
-                bot.getFlujosAutomatizados().add(f);
-            });
-        }
-        bot.setRequisitos(new ArrayList<>());
-        if (botActualizado.getRequisitos() != null) {
-            botActualizado.getRequisitos().forEach(r -> {
-                r.setBotServicio(bot);
-                bot.getRequisitos().add(r);
-            });
-        }
+        // Actualizar relaciones usando los setters mejorados
+        bot.setFunciones(botActualizado.getFunciones());
+        bot.setIntegraciones(botActualizado.getIntegraciones());
+        bot.setCasosUso(botActualizado.getCasosUso());
+        bot.setTecnologias(botActualizado.getTecnologias());
+        bot.setFlujosAutomatizados(botActualizado.getFlujosAutomatizados());
+        bot.setRequisitos(botActualizado.getRequisitos());
+
         return botServicioRepository.save(bot);
     }
+
+
 
     public void eliminar(Long id) {
         botServicioRepository.deleteById(id);
