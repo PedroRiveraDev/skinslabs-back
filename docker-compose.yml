@@ -35,13 +35,13 @@ services:
       - skinslabs-network
     restart: unless-stopped
 
-  # Nginx como proxy reverso (opcional)
+  # Nginx como proxy reverso
   nginx:
     image: nginx:alpine
     container_name: skinslabs-nginx
     ports:
       - "8090:80"
-      - "443:443"
+      - "8443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./ssl:/etc/nginx/ssl:ro
@@ -59,4 +59,4 @@ volumes:
 
 networks:
   skinslabs-network:
-    driver: bridge 
+    driver: bridge
