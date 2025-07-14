@@ -12,8 +12,9 @@ COPY mvnw .
 # Descargar dependencias (capa cacheable)
 RUN mvn dependency:go-offline -B
 
-# Copiar código fuente
+# Copiar código fuente y configuración
 COPY src ./src
+COPY src/main/resources/application.properties ./src/main/resources/application.properties
 
 # Construir la aplicación
 RUN mvn clean package -DskipTests
@@ -22,8 +23,7 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jre-alpine
 
 # Instalar dependencias del sistema
-RUN apk add --no-cache \
-    curl
+RUN apk add --no-cache curl
 
 # Crear usuario no-root
 RUN addgroup -g 1001 -S spring && adduser -S spring -G spring
@@ -33,6 +33,9 @@ WORKDIR /app
 
 # Copiar JAR desde la etapa de construcción
 COPY --from=build /app/target/*.jar app.jar
+
+# Copiar configuración de Spring
+COPY src/main/resources/application.properties /app/application.properties
 
 # Crear directorio para uploads y asignar permisos
 RUN mkdir -p /app/uploads && chown -R spring:spring /app
@@ -47,4 +50,4 @@ EXPOSE 8080
 ENV JAVA_OPTS="-Xmx512m -Xms256m"
 
 # Comando de inicio
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"] 
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar --spring.config.location=file:/app/application.properties"]
