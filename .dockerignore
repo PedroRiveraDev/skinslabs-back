@@ -1,0 +1,58 @@
+# Archivos de Git
+.git
+.gitignore
+
+# Archivos de Maven
+target/
+!target/*.jar
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Archivos de IDE
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+.settings/
+.project
+.classpath
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Archivos de configuración local
+application-local.properties
+application-dev.properties
+
+# Documentación
+README.md
+*.md
+
+# Scripts de despliegue
+deploy.sh
+*.sh
+
+# Archivos de Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Archivos de SSL (si los hay)
+ssl/
+*.pem
+*.key
+*.crt
+
+# Archivos de backup
+*.bak
+*.backup 

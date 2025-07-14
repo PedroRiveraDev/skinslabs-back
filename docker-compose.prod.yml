@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # Base de datos H2 para producción
+  h2-database:
+    image: oscarfonts/h2
+    container_name: skinslabs-h2-prod
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    environment:
+      H2_OPTIONS: "-ifNotExists"
+    volumes:
+      - h2-data-prod:/h2-data
+    networks:
+      - skinslabs-network-prod
+    restart: unless-stopped
+
+  # Aplicación Spring Boot para producción
+  skinslabs-backend:
+    build: .
+    container_name: skinslabs-backend-prod
+    ports:
+      - "8181:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:h2:tcp://h2-database:9092/skinslabsdb
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=
+      - JAVA_OPTS=-Xmx1024m -Xms512m -XX:+UseG1GC -XX:MaxGCPauseMillis=200
+    volumes:
+      - uploads-data-prod:/app/uploads
+      - ./data:/app/data
+    depends_on:
+      - h2-database
+    networks:
+      - skinslabs-network-prod
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  h2-data-prod:
+    driver: local
+  uploads-data-prod:
+    driver: local
+
+networks:
+  skinslabs-network-prod:
+    driver: bridge 
