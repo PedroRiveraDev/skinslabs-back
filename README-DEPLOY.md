@@ -248,19 +248,27 @@ systemctl restart sshd
    kill -9 <PID>
    ```
 
-2. **Memoria insuficiente**:
+2. **Error de build de Docker**:
+   ```bash
+   # Si aparece error con imagen de Maven
+   # El Dockerfile ya está corregido con maven:3.9.6-eclipse-temurin-17
+   docker system prune -f
+   docker build --no-cache -t skinslabs-backend .
+   ```
+
+3. **Memoria insuficiente**:
    ```bash
    # Ajustar JAVA_OPTS en docker-compose.prod.yml
    JAVA_OPTS=-Xmx512m -Xms256m
    ```
 
-3. **Base de datos no conecta**:
+4. **Base de datos no conecta**:
    ```bash
    docker-compose logs h2-database
    docker-compose restart h2-database
    ```
 
-4. **Aplicación no inicia**:
+5. **Aplicación no inicia**:
    ```bash
    docker-compose logs skinslabs-backend
    docker-compose down && docker-compose up -d

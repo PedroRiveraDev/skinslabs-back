@@ -1,5 +1,5 @@
 # Etapa de construcción
-FROM maven:3.9.6-openjdk-17 AS build
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 
 # Establecer directorio de trabajo
 WORKDIR /app
@@ -19,15 +19,14 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Etapa de ejecución
-FROM openjdk:17-jre-slim
+FROM eclipse-temurin:17-jre-alpine
 
 # Instalar dependencias del sistema
-RUN apt-get update && apt-get install -y \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache \
+    curl
 
 # Crear usuario no-root
-RUN groupadd -r spring && useradd -r -g spring spring
+RUN addgroup -g 1001 -S spring && adduser -S spring -G spring
 
 # Establecer directorio de trabajo
 WORKDIR /app
